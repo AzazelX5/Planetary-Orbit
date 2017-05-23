@@ -1,7 +1,6 @@
 # coding=utf-8
 from multiprocessing import Process, Queue
-import time, math
-import numpy as np
+import math
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
 import matplotlib.animation as animation
@@ -110,6 +109,7 @@ def calculate(q, x_0, v_y_0, x_1, v_y_1):
 
             if t == 2:
                 t = 0
+
 def collect(q1, q2, q3, q4):
     while True:
         n1 = q1.get(True)
@@ -130,162 +130,86 @@ def collect(q1, q2, q3, q4):
 
         yield data_1_1, data_1_2, data_2_1, data_2_2, data_3_1, data_3_2, data_4_1, data_4_2
 
-
 def plot():
-    fig = plt.figure(figsize = (20,10))
-    ax1 = fig.add_subplot(2, 3, 4, xlim=(-2.5e5, 2.5e5), ylim=(-2.5e5, 2.5e5))
-    ax2 = fig.add_subplot(5, 2, 8, xlim=(-2.5e5, 5e6), ylim=(-2.5e5, 2.5e5))
-    ax3 = fig.add_subplot(4, 1, 1, xlim=(-2.5e5, 5e6), ylim=(-2.5e5, 2.5e5))
+    fig = plt.figure(figsize=(20, 10))
+    ax1 = fig.add_subplot(4, 1, 1, xlim=(-2.5e5, 5e6), ylim=(-2.5e5, 2.5e5))
+    ax2 = fig.add_subplot(2, 3, 4, xlim=(-2.5e5, 2.5e5), ylim=(-2.5e5, 2.5e5))
+    ax3 = fig.add_subplot(5, 2, 8, xlim=(-2.5e5, 5e6), ylim=(-2.5e5, 2.5e5))
 
-    line3_1_0, = ax3.plot([], [], '-', color='silver')
-    line3_1_1, = ax3.plot([], [], marker='.', color='blue')
+    list_track_1 = [['line1_0', 'line1_1'], ['line2_0', 'line2_1'], ['line3_0', 'line3_1'], ['line4_0', 'line4_1'],
+                    ['line5_0', 'line5_1'], ['line6_0', 'line6_1'], ['line7_0', 'line7_1'], ['line8_0', 'line8_1']]
+    list_color_1 = ['blue', 'yellow', 'cyan', 'gold', 'goldenrod', 'tan', 'aquamarine', 'lightsteelblue']
 
-    line3_2_0, = ax3.plot([], [], '-', color='silver')
-    line3_2_1, = ax3.plot([], [], marker='.', color='yellow')
+    list_track_2 = [['line1_0', 'line1_1'], ['line2_0', 'line2_1'], ['line3_0', 'line3_1'], ['line4_0', 'line4_1']]
+    list_color_2 = ['blue', 'yellow', 'cyan', 'gold']
 
-    line3_3_0, = ax3.plot([], [], '-', color='silver')
-    line3_3_1, = ax3.plot([], [], marker='.', color='cyan')
+    list_track_3 = [['line5_0', 'line5_1'], ['line6_0', 'line6_1'], ['line7_0', 'line7_1'], ['line8_0', 'line8_1']]
+    list_color_3 = ['goldenrod', 'tan', 'aquamarine', 'lightsteelblue']
 
-    line3_4_0, = ax3.plot([], [], '-', color='silver')
-    line3_4_1, = ax3.plot([], [], marker='.', color='gold')
+    n1 = n2 = n3  = 0
+    x_data = [[46001.2], [107476.259], [152097.7], [206644.545], [740520.0], [1353572.956], [2748938.461],[4452940.833]]
+    y_data = [[0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0]]
 
-    line3_5_0, = ax3.plot([], [], '-', color='silver')
-    line3_5_1, = ax3.plot([], [], marker='o', color='goldenrod')
+    for each_1 in list_track_1:
+        each_1[0], = ax1.plot([], [], '-', color='silver')
+        each_1[1], = ax1.plot([], [], 'o', color=list_color_1[n1])
 
-    line3_6_0, = ax3.plot([], [], '-', color='silver')
-    line3_6_1, = ax3.plot([], [], marker='o', color='tan')
+        n1 += 1
 
-    line3_7_0, = ax3.plot([], [], '-', color='silver')
-    line3_7_1, = ax3.plot([], [], marker='o', color='aquamarine')
+    for each_2 in list_track_2:
+        each_2[0], = ax2.plot([], [], '-', color='silver')
+        each_2[1], = ax2.plot([], [], marker='o', color=list_color_2[n2])
 
-    line3_8_0, = ax3.plot([], [], '-', color='silver')
-    line3_8_1, = ax3.plot([], [], marker='o', color='lightsteelblue')
+        n2 += 1
 
+    for each_3 in list_track_3:
+        each_3[0], = ax3.plot([], [], '-', color='silver')
+        each_3[1], = ax3.plot([], [], marker='o', color=list_color_3[n3])
 
-    line1_0, = ax1.plot([], [], '-', color='silver')
-    line1_1, = ax1.plot([], [], marker='.', color='blue')
+        n3 += 1
 
-    line2_0, = ax1.plot([], [], '-', color='silver')
-    line2_1, = ax1.plot([], [], marker='.', color='yellow')
+    def run(data):
+        t1 = t2 = 0
+        t3 = 4
+        
+        for each_1 in list_track_1:
+            x_data[t1].append(data[t1][0])
+            y_data[t1].append(data[t1][1])
+            each_1[0].set_data(x_data[t1], y_data[t1])
+            each_1[1].set_data(data[t1][0], data[t1][1])
 
-    line3_0, = ax1.plot([], [], '-', color='silver')
-    line3_1, = ax1.plot([], [], marker='.', color='cyan')
+            t1 += 1
 
-    line4_0, = ax1.plot([], [], '-', color='silver')
-    line4_1, = ax1.plot([], [], marker='.', color='gold')
+        for each_2 in list_track_2:
+            each_2[0].set_data(x_data[t2], y_data[t2])
+            each_2[1].set_data(data[t2][0], data[t2][1])
 
-    line5_0, = ax2.plot([], [], '-', color='silver')
-    line5_1, = ax2.plot([], [], marker='o', color='goldenrod')
+            t2 += 1
 
-    line6_0, = ax2.plot([], [], '-', color='silver')
-    line6_1, = ax2.plot([], [], marker='o', color='tan')
+        for each_3 in list_track_3:
+            each_3[0].set_data(x_data[t3], y_data[t3])
+            each_3[1].set_data(data[t3][0], data[t3][1])
 
-    line7_0, = ax2.plot([], [], '-', color='silver')
-    line7_1, = ax2.plot([], [], marker='o', color='aquamarine')
+            t3 += 1
 
-    line8_0, = ax2.plot([], [], '-', color='silver')
-    line8_1, = ax2.plot([], [], marker='o', color='lightsteelblue')
-
+        return list_track_1[0][0], list_track_1[0][1], list_track_1[1][0], list_track_1[1][1], list_track_1[2][0], \
+               list_track_1[2][1], list_track_1[3][0], list_track_1[3][1], \
+               list_track_1[4][0], list_track_1[4][1], list_track_1[5][0], list_track_1[5][1], list_track_1[6][0], \
+               list_track_1[6][1], list_track_1[7][0], list_track_1[7][1], \
+               list_track_2[0][0], list_track_2[0][1], list_track_2[1][0], list_track_2[1][1], list_track_2[2][0], \
+               list_track_2[2][1], list_track_2[3][0], list_track_2[3][1], \
+               list_track_3[0][0], list_track_3[0][1], list_track_3[1][0], list_track_3[1][1], list_track_3[2][0], \
+               list_track_3[2][1], list_track_3[3][0], list_track_3[3][1]
 
     cir1 = Circle(xy=(0.0, 0.0), radius=1e4, color='red')
-    cir2 = Circle(xy=(0.0, 0.0), radius=3e4, color='red')
-    cir3 = Circle(xy=(0.0, 0.0), radius=1e4, color='red')
+    cir2 = Circle(xy=(0.0, 0.0), radius=1e4, color='red')
+    cir3 = Circle(xy=(0.0, 0.0), radius=3e4, color='red')
+
     ax1.grid()
     ax2.grid()
     ax3.grid()
 
-    x_1data, y_1data = [], []
-    x_2data, y_2data = [], []
-    x_3data, y_3data = [], []
-    x_4data, y_4data = [], []
-    x_5data, y_5data = [], []
-    x_6data, y_6data = [], []
-    x_7data, y_7data = [], []
-    x_8data, y_8data = [], []
-
-    def run(data):
-        data_1, data_2, data_3, data_4, data_5, data_6, data_7, data_8 = data
-
-        x_1data.append(data_1[0])
-        y_1data.append(data_1[1])
-
-        line1_0.set_data(x_1data, y_1data)
-        line1_1.set_data(data_1[0],data_1[1])
-
-        line3_1_0.set_data(x_1data, y_1data)
-        line3_1_1.set_data(data_1[0], data_1[1])
-
-        x_2data.append(data_2[0])
-        y_2data.append(data_2[1])
-
-        line2_0.set_data(x_2data, y_2data)
-        line2_1.set_data(data_2[0], data_2[1])
-
-        line3_2_0.set_data(x_2data, y_2data)
-        line3_2_1.set_data(data_2[0], data_2[1])
-
-        x_3data.append(data_3[0])
-        y_3data.append(data_3[1])
-
-        line3_0.set_data(x_3data, y_3data)
-        line3_1.set_data(data_3[0], data_3[1])
-
-        line3_3_0.set_data(x_3data, y_3data)
-        line3_3_1.set_data(data_3[0], data_3[1])
-
-        x_4data.append(data_4[0])
-        y_4data.append(data_4[1])
-
-        line4_0.set_data(x_4data, y_4data)
-        line4_1.set_data(data_4[0], data_4[1])
-
-        line3_4_0.set_data(x_4data, y_4data)
-        line3_4_1.set_data(data_4[0], data_4[1])
-
-        x_5data.append(data_5[0])
-        y_5data.append(data_5[1])
-
-        line5_0.set_data(x_5data, y_5data)
-        line5_1.set_data(data_5[0], data_5[1])
-
-        line3_5_0.set_data(x_5data, y_5data)
-        line3_5_1.set_data(data_5[0], data_5[1])
-
-        x_6data.append(data_6[0])
-        y_6data.append(data_6[1])
-
-        line6_0.set_data(x_6data, y_6data)
-        line6_1.set_data(data_6[0], data_6[1])
-
-        line3_6_0.set_data(x_6data, y_6data)
-        line3_6_1.set_data(data_6[0], data_6[1])
-
-        x_7data.append(data_7[0])
-        y_7data.append(data_7[1])
-
-        line7_0.set_data(x_7data, y_7data)
-        line7_1.set_data(data_7[0], data_7[1])
-
-        line3_7_0.set_data(x_7data, y_7data)
-        line3_7_1.set_data(data_7[0], data_7[1])
-
-        x_8data.append(data_8[0])
-        y_8data.append(data_8[1])
-
-        line8_0.set_data(x_8data, y_8data)
-        line8_1.set_data(data_8[0], data_8[1])
-
-        line3_8_0.set_data(x_8data, y_8data)
-        line3_8_1.set_data(data_8[0], data_8[1])
-
-        return line1_0, line2_0, line3_0, line4_0, line5_0, line6_0, line7_0, line8_0,\
-               line1_1, line2_1, line3_1, line4_1, line5_1, line6_1, line7_1, line8_1,\
-               line3_1_0, line3_2_0, line3_3_0, line3_4_0, line3_5_0, line3_6_0, line3_7_0, line3_8_0,\
-               line3_1_1, line3_2_1, line3_3_1, line3_4_1, line3_5_1, line3_6_1, line3_7_1, line3_8_1
-
-
-
-    ani= animation.FuncAnimation(fig, run, collect(q1, q2, q3, q4), blit=True, interval=1e-10, repeat=False)
+    ani = animation.FuncAnimation(fig, run, collect(q1, q2, q3, q4), blit=True, interval=1e-10, repeat=False)
     ax1.add_patch(cir1)
     ax2.add_patch(cir2)
     ax3.add_patch(cir3)
@@ -296,14 +220,12 @@ q2 = Queue()
 q3 = Queue()
 q4 = Queue()
 
-t1 = Process(target=calculate, args=(q1, 46001.2, 0.053682, 107476.259, 0.035258))
+t1 = Process(target=calculate, args=(q1, 46001.2, 0.05896, 107476.259, 0.035258))
 t2 = Process(target=calculate, args=(q2, 152097.7, 0.029, 206644.545, 0.026499))
 t3 = Process(target=calculate, args=(q3, 740520.0, 0.013719, 1353572.956, 0.010175))
 t4 = Process(target=calculate, args=(q4, 2748938.461, 0.0071, 4452940.833, 0.0054899))
 t5 = Process(target=collect, args=(q1, q2, q3, q4))
 t6 = Process(target=plot, args=())
-
-
 
 t1.start()
 t2.start()
@@ -312,12 +234,10 @@ t4.start()
 t5.start()
 t6.start()
 
-
 t1.join()
 t2.join()
 t3.join()
 t4.join()
 t5.join()
 t6.join()
-
 
