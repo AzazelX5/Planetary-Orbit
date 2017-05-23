@@ -1,9 +1,16 @@
 # coding=utf-8
 from multiprocessing import Process, Queue
-import math
-import matplotlib.pyplot as plt
 from matplotlib.patches import Circle
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 import matplotlib.animation as animation
+import sys, math
+
+mpl.rcParams[u'font.sans-serif'] = ['simhei']
+mpl.rcParams['axes.unicode_minus'] = False
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
 
 def calculate(q, x_0, v_y_0, x_1, v_y_1):
     k1_x = k1_y = 0
@@ -131,10 +138,19 @@ def collect(q1, q2, q3, q4):
         yield data_1_1, data_1_2, data_2_1, data_2_2, data_3_1, data_3_2, data_4_1, data_4_2
 
 def plot():
-    fig = plt.figure(figsize=(20, 10))
+    fig = plt.figure(figsize = (20,10))
     ax1 = fig.add_subplot(4, 1, 1, xlim=(-2.5e5, 5e6), ylim=(-2.5e5, 2.5e5))
     ax2 = fig.add_subplot(2, 3, 4, xlim=(-2.5e5, 2.5e5), ylim=(-2.5e5, 2.5e5))
     ax3 = fig.add_subplot(5, 2, 8, xlim=(-2.5e5, 5e6), ylim=(-2.5e5, 2.5e5))
+    ax4 = fig.add_subplot(6, 1, 3)
+
+    ax4.set_xticks([])
+    ax4.set_yticks([])
+    ax4.spines['right'].set_color('none')
+    ax4.spines['top'].set_color('none')
+    ax4.spines['bottom'].set_color('none')
+    ax4.spines['left'].set_color('none')
+
 
     list_track_1 = [['line1_0', 'line1_1'], ['line2_0', 'line2_1'], ['line3_0', 'line3_1'], ['line4_0', 'line4_1'],
                     ['line5_0', 'line5_1'], ['line6_0', 'line6_1'], ['line7_0', 'line7_1'], ['line8_0', 'line8_1']]
@@ -146,7 +162,12 @@ def plot():
     list_track_3 = [['line5_0', 'line5_1'], ['line6_0', 'line6_1'], ['line7_0', 'line7_1'], ['line8_0', 'line8_1']]
     list_color_3 = ['goldenrod', 'tan', 'aquamarine', 'lightsteelblue']
 
-    n1 = n2 = n3  = 0
+    list_track_4 = ['line0', 'line1', 'line2', 'line3', 'line4', 'line5', 'line6', 'line7', 'line8']
+    list_color_4 = ['red', 'blue', 'yellow', 'cyan', 'gold', 'goldenrod', 'tan', 'aquamarine', 'lightsteelblue']
+    list_name_US = ['sun', 'Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']
+    list_name_CN = [u'太阳', u'水星', u'金星', u'地球', u'火星', u'木星', u'土星', u'天王星', u'海王星']
+
+    n1 = n2 = n3 = n4 = 0
     x_data = [[46001.2], [107476.259], [152097.7], [206644.545], [740520.0], [1353572.956], [2748938.461],[4452940.833]]
     y_data = [[0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0], [0.0]]
 
@@ -168,10 +189,17 @@ def plot():
 
         n3 += 1
 
+    for each_4 in list_track_4:
+        each_4, = ax4.plot([], [], 'o', color=list_color_4[n4])
+        each_4.set_label(list_name_CN[n4])
+        ax4.legend(loc = 9, ncol = 9)
+
+        n4 += 1
+
     def run(data):
-        t1 = t2 = 0
+        t1 = t2  = 0
         t3 = 4
-        
+
         for each_1 in list_track_1:
             x_data[t1].append(data[t1][0])
             y_data[t1].append(data[t1][1])
@@ -192,14 +220,10 @@ def plot():
 
             t3 += 1
 
-        return list_track_1[0][0], list_track_1[0][1], list_track_1[1][0], list_track_1[1][1], list_track_1[2][0], \
-               list_track_1[2][1], list_track_1[3][0], list_track_1[3][1], \
-               list_track_1[4][0], list_track_1[4][1], list_track_1[5][0], list_track_1[5][1], list_track_1[6][0], \
-               list_track_1[6][1], list_track_1[7][0], list_track_1[7][1], \
-               list_track_2[0][0], list_track_2[0][1], list_track_2[1][0], list_track_2[1][1], list_track_2[2][0], \
-               list_track_2[2][1], list_track_2[3][0], list_track_2[3][1], \
-               list_track_3[0][0], list_track_3[0][1], list_track_3[1][0], list_track_3[1][1], list_track_3[2][0], \
-               list_track_3[2][1], list_track_3[3][0], list_track_3[3][1]
+        return list_track_1[0][0], list_track_1[0][1], list_track_1[1][0], list_track_1[1][1], list_track_1[2][0], list_track_1[2][1], list_track_1[3][0], list_track_1[3][1], \
+               list_track_1[4][0], list_track_1[4][1], list_track_1[5][0], list_track_1[5][1], list_track_1[6][0], list_track_1[6][1], list_track_1[7][0], list_track_1[7][1], \
+               list_track_2[0][0], list_track_2[0][1], list_track_2[1][0], list_track_2[1][1], list_track_2[2][0], list_track_2[2][1], list_track_2[3][0], list_track_2[3][1], \
+               list_track_3[0][0], list_track_3[0][1], list_track_3[1][0], list_track_3[1][1], list_track_3[2][0], list_track_3[2][1], list_track_3[3][0], list_track_3[3][1]
 
     cir1 = Circle(xy=(0.0, 0.0), radius=1e4, color='red')
     cir2 = Circle(xy=(0.0, 0.0), radius=1e4, color='red')
@@ -220,7 +244,7 @@ q2 = Queue()
 q3 = Queue()
 q4 = Queue()
 
-t1 = Process(target=calculate, args=(q1, 46001.2, 0.05896, 107476.259, 0.035258))
+t1 = Process(target=calculate, args=(q1, 46001.2, 0.053682, 107476.259, 0.035258))
 t2 = Process(target=calculate, args=(q2, 152097.7, 0.029, 206644.545, 0.026499))
 t3 = Process(target=calculate, args=(q3, 740520.0, 0.013719, 1353572.956, 0.010175))
 t4 = Process(target=calculate, args=(q4, 2748938.461, 0.0071, 4452940.833, 0.0054899))
