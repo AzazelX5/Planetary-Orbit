@@ -139,11 +139,15 @@ def collect(q1, q2, q3, q4):
 
 def plot():
     fig = plt.figure(figsize = (20,10))
-    ax1 = fig.add_subplot(4, 1, 1, xlim=(-2.5e5, 5e6), ylim=(-2.5e5, 2.5e5))
-    ax2 = fig.add_subplot(2, 3, 4, xlim=(-2.5e5, 2.5e5), ylim=(-2.5e5, 2.5e5))
-    ax3 = fig.add_subplot(5, 2, 8, xlim=(-2.5e5, 5e6), ylim=(-2.5e5, 2.5e5))
+    ax1 = fig.add_subplot(4, 1, 1, xlim=(-2.5e5, 5.0e6), ylim=(-5.0e5, 5.0e5))
+    ax2 = fig.add_subplot(2, 3, 4, xlim=(-3.0e5, 3.0e5), ylim=(-3.0e5, 3.0e5))
+    ax3 = fig.add_subplot(5, 2, 8, xlim=(-2.5e5, 5.0e6), ylim=(-5.0e5, 5.0e5))
     ax4 = fig.add_subplot(6, 1, 3)
 
+    ax1.set_title(u"八大行星位置关系")
+    ax2.set_title(u"水星、金星、地球、火星运动轨道")
+    ax3.set_title(u"土星、木星、天王星、海王星运动轨道")
+    ax4.set_title(u"标注")
     ax4.set_xticks([])
     ax4.set_yticks([])
     ax4.spines['right'].set_color('none')
@@ -154,16 +158,16 @@ def plot():
 
     list_track_1 = [['line1_0', 'line1_1'], ['line2_0', 'line2_1'], ['line3_0', 'line3_1'], ['line4_0', 'line4_1'],
                     ['line5_0', 'line5_1'], ['line6_0', 'line6_1'], ['line7_0', 'line7_1'], ['line8_0', 'line8_1']]
-    list_color_1 = ['blue', 'yellow', 'cyan', 'gold', 'goldenrod', 'tan', 'aquamarine', 'lightsteelblue']
+    list_color_1 = ['deepskyblue', 'gold', 'cyan', 'orangered', 'goldenrod', 'tan', 'aquamarine', 'lightsteelblue']
 
     list_track_2 = [['line1_0', 'line1_1'], ['line2_0', 'line2_1'], ['line3_0', 'line3_1'], ['line4_0', 'line4_1']]
-    list_color_2 = ['blue', 'yellow', 'cyan', 'gold']
+    list_color_2 = ['deepskyblue', 'gold', 'cyan', 'orangered']
 
     list_track_3 = [['line5_0', 'line5_1'], ['line6_0', 'line6_1'], ['line7_0', 'line7_1'], ['line8_0', 'line8_1']]
     list_color_3 = ['goldenrod', 'tan', 'aquamarine', 'lightsteelblue']
 
     list_track_4 = ['line0', 'line1', 'line2', 'line3', 'line4', 'line5', 'line6', 'line7', 'line8']
-    list_color_4 = ['red', 'blue', 'yellow', 'cyan', 'gold', 'goldenrod', 'tan', 'aquamarine', 'lightsteelblue']
+    list_color_4 = ['red'] + list_color_1
     list_name_US = ['sun', 'Mercury', 'Venus', 'Earth', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']
     list_name_CN = [u'太阳', u'水星', u'金星', u'地球', u'火星', u'木星', u'土星', u'天王星', u'海王星']
 
@@ -225,7 +229,7 @@ def plot():
                list_track_2[0][0], list_track_2[0][1], list_track_2[1][0], list_track_2[1][1], list_track_2[2][0], list_track_2[2][1], list_track_2[3][0], list_track_2[3][1], \
                list_track_3[0][0], list_track_3[0][1], list_track_3[1][0], list_track_3[1][1], list_track_3[2][0], list_track_3[2][1], list_track_3[3][0], list_track_3[3][1]
 
-    cir1 = Circle(xy=(0.0, 0.0), radius=1e4, color='red')
+    cir1 = Circle(xy=(0.0, 0.0), radius=2e4, color='red')
     cir2 = Circle(xy=(0.0, 0.0), radius=1e4, color='red')
     cir3 = Circle(xy=(0.0, 0.0), radius=3e4, color='red')
 
@@ -244,7 +248,7 @@ q2 = Queue()
 q3 = Queue()
 q4 = Queue()
 
-t1 = Process(target=calculate, args=(q1, 46001.2, 0.053682, 107476.259, 0.035258))
+t1 = Process(target=calculate, args=(q1, 46001.2, 0.05896, 107476.259, 0.035258))
 t2 = Process(target=calculate, args=(q2, 152097.7, 0.029, 206644.545, 0.026499))
 t3 = Process(target=calculate, args=(q3, 740520.0, 0.013719, 1353572.956, 0.010175))
 t4 = Process(target=calculate, args=(q4, 2748938.461, 0.0071, 4452940.833, 0.0054899))
@@ -264,4 +268,3 @@ t3.join()
 t4.join()
 t5.join()
 t6.join()
-
